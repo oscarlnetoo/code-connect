@@ -1,32 +1,45 @@
-# React + TypeScript + Vite
+# Web
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Web front end of Code Connect, built with [React](https://react.dev/), TypeScript and [Vite](https://vite.dev/). Linting runs with Oxlint.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Before starting, make sure you've met the following requirements:
 
-## React Compiler
+- You have installed version 22.12 or newer of `Node.js`.
+- You have installed `pnpm` (<https://pnpm.io/installation>).
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Installing the Project
 
-## Expanding the Oxlint configuration
+Below are the steps to install the web app. Run them from the repository root.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+1. Clone the repository
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+    ```bash
+    git clone https://github.com/oscarlnetoo/code-connect.git
+    cd code-connect
+    ```
+
+2. Install the dependencies
+
+    ```bash
+    pnpm install
+    ```
+
+## Using the Project
+
+To use the web app, follow these steps:
+
+```bash
+pnpm --filter web dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+The app is served at `http://localhost:5173`.
+
+Other helpful commands (from the root, or without `--filter web` inside `apps/web`):
+
+```bash
+pnpm --filter web build     # Type-check and build to dist/
+pnpm --filter web preview   # Preview the production build
+pnpm --filter web lint      # Lint
+```
