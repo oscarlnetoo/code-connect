@@ -1,3 +1,8 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { getErrorMessage } from '../../services/apiError'
+import { login, registerUser } from '../../services/auth'
+import { saveToken } from '../../services/tokenStorage'
 import { TextLink } from '../atoms/TextLink'
 import { RegisterForm } from '../organisms/RegisterForm'
 import type { RegisterValues } from '../organisms/RegisterForm'
@@ -9,9 +14,33 @@ const providers = [
   { name: 'Gmail', logo: '/gmail.png' },
 ]
 
+const REGISTER_ERRORS = {
+  400: 'Verifique os dados informados',
+  409: 'Este email já está cadastrado',
+}
+
 export function RegisterPage() {
-  function handleSubmit(values: RegisterValues) {
-    console.info('register submitted', values)
+  const navigate = useNavigate()
+  const [error, setError] = useState<string>()
+  const [submitting, setSubmitting] = useState(false)
+
+  async function handleSubmit({ remember, ...user }: RegisterValues) {
+    setError(undefined)
+    setSubmitting(true)
+    try {
+      await registerUser(user)
+      // Sign the new user in right away instead of making them log in again.
+      const { accessToken } = await login({
+        email: user.email,
+        password: user.password,
+      })
+      saveToken(accessToken, remember)
+      navigate('/')
+    } catch (err) {
+      setError(getErrorMessage(err, REGISTER_ERRORS))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function handleSocialSelect(name: string) {
@@ -33,7 +62,11 @@ export function RegisterPage() {
         </>
       }
     >
-      <RegisterForm onSubmit={handleSubmit} />
+      <RegisterForm
+        onSubmit={handleSubmit}
+        error={error}
+        submitting={submitting}
+      />
       <SocialLogin providers={providers} onSelect={handleSocialSelect} />
     </AuthLayout>
   )
