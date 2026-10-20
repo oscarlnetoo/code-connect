@@ -23,6 +23,9 @@ type Errors = Partial<Record<'name' | 'email' | 'password', string>>
 const REQUIRED = 'Campo obrigatório'
 const INVALID_EMAIL = 'Email inválido'
 const EMAIL_PATTERN = /^\S+@\S+\.\S+$/
+// Mirrors the API's CreateUserDto password rule.
+const PASSWORD_MIN_LENGTH = 8
+const SHORT_PASSWORD = `A senha deve ter ao menos ${PASSWORD_MIN_LENGTH} caracteres`
 
 export function RegisterForm({
   onSubmit,
@@ -46,6 +49,8 @@ export function RegisterForm({
     if (!trimmedEmail) nextErrors.email = REQUIRED
     else if (!EMAIL_PATTERN.test(trimmedEmail)) nextErrors.email = INVALID_EMAIL
     if (!password) nextErrors.password = REQUIRED
+    else if (password.length < PASSWORD_MIN_LENGTH)
+      nextErrors.password = SHORT_PASSWORD
     setErrors(nextErrors)
 
     if (Object.keys(nextErrors).length > 0) return

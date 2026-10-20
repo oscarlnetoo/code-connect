@@ -44,16 +44,29 @@ describe('RegisterForm', () => {
     const { onSubmit } = setup()
     await userEvent.type(screen.getByLabelText('Nome'), '  Ana Silva  ')
     await userEvent.type(screen.getByLabelText('Email'), '  ana@code.com  ')
-    await userEvent.type(screen.getByLabelText('Senha'), 'segredo')
+    await userEvent.type(screen.getByLabelText('Senha'), 'segredo123')
     await userEvent.click(screen.getByLabelText('Lembrar-me'))
     await userEvent.click(screen.getByRole('button', { name: /Cadastrar/ }))
     expect(onSubmit).toHaveBeenCalledWith({
       name: 'Ana Silva',
       email: 'ana@code.com',
-      password: 'segredo',
+      password: 'segredo123',
       remember: true,
     })
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('flags a password shorter than 8 characters', async () => {
+    const { onSubmit } = setup()
+    await userEvent.type(screen.getByLabelText('Nome'), 'Ana')
+    await userEvent.type(screen.getByLabelText('Email'), 'ana@code.com')
+    await userEvent.type(screen.getByLabelText('Senha'), 'segredo')
+    await userEvent.click(screen.getByRole('button', { name: /Cadastrar/ }))
+    expect(
+      screen.getByText('A senha deve ter ao menos 8 caracteres'),
+    ).toBeInTheDocument()
+    expect(screen.getByLabelText('Senha')).toBeInvalid()
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 
   it('shows a form-level error', () => {
