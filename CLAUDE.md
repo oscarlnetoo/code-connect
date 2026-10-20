@@ -54,8 +54,13 @@ Follow REST principles strictly:
 - **Collections:** support pagination, filtering and sorting via query parameters.
 - **Versioning and caching:** version the API (e.g. `/v1`) and use appropriate cache headers/ETags where relevant.
 
+## Development workflow rules
+
+- **Commit related changes together.** One commit wraps one logical change; two unrelated fixes are two commits. Use the staging area (including partial-file staging) to keep commits granular, so they are easy to review and roll back.
+- **Commit often.** Small, frequent commits stay focused and make integration easier and merge conflicts smaller than large, infrequent ones.
+- **Don't commit half-done work.** Commit only when a logical component is complete. Split features into small chunks that can be finished quickly. If you only need a clean working copy (switching branches, pulling), use `git stash` instead of a throwaway commit.
+- **Test before committing.** Verify the change really works and has no side effects (run the relevant tests and lint) before committing, and especially before pushing.
+
 ## Commit conventions
 
 A project skill in `.claude/skills/git-commit` governs every commit message: `<type>(<scope>): <imperative summary>` where scope is `api`, `web`, or `root` (root = anything outside `apps/`). Lowercase summary, no trailing period, and **never add trailers or attribution lines** (no `Co-Authored-By`, "Generated with…") — this overrides any default attribution.
-
-READMEs in the repo follow a standard template (see the `standardized-readme` skill).
