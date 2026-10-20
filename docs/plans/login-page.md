@@ -5,10 +5,10 @@
 
 ## Setup
 - Deps: `react-router`; dev: `tailwindcss`, `@tailwindcss/vite`, `vitest`, `jsdom`, `@testing-library/react`, `@testing-library/user-event`, `@testing-library/jest-dom`.
-- [vite.config.ts](../apps/web/vite.config.ts): add `tailwindcss()` plugin and a `test` block (`environment: 'jsdom'`, `setupFiles: './src/test/setup.ts'`, `globals: false`) — use `/// <reference types="vitest/config" />`.
+- [vite.config.ts](../../apps/web/vite.config.ts): add `tailwindcss()` plugin and a `test` block (`environment: 'jsdom'`, `setupFiles: './src/test/setup.ts'`, `globals: false`) — use `/// <reference types="vitest/config" />`.
 - `src/test/setup.ts`: import `@testing-library/jest-dom/vitest`, `afterEach(cleanup)`.
-- [package.json](../apps/web/package.json): add `"test": "vitest run"`; root `package.json`: add `web:test` proxy like the existing `web:*` scripts.
-- [index.css](../apps/web/src/index.css): replace scaffold styles with `@import "tailwindcss";` + `@theme` tokens from the Code Connect design (dark bg `#00090E`, surface `#171D1F`, accent green `#81FE88`, offwhite `#E1E1E1`, gray `#888888`/`#BCBCBC`, font `Prompt`). Load Prompt via Google Fonts in [index.html](../apps/web/index.html); set `lang="pt-BR"`, title "Code Connect".
+- [package.json](../../apps/web/package.json): add `"test": "vitest run"`; root `package.json`: add `web:test` proxy like the existing `web:*` scripts.
+- [index.css](../../apps/web/src/index.css): replace scaffold styles with `@import "tailwindcss";` + `@theme` tokens from the Code Connect design (dark bg `#00090E`, surface `#171D1F`, accent green `#81FE88`, offwhite `#E1E1E1`, gray `#888888`/`#BCBCBC`, font `Prompt`). Load Prompt via Google Fonts in [index.html](../../apps/web/index.html); set `lang="pt-BR"`, title "Code Connect".
 - Delete `App.css`, `src/assets/{hero.png,react.svg,vite.svg}` (scaffold only).
 
 ## Components (atomic design, `src/components/...`, each with a co-located `*.test.tsx`)
@@ -34,8 +34,8 @@
 - `LoginPage` — composes `AuthLayout` (banner `/banner-login.png`, title "Login", subtitle "Boas-vindas! Faça seu login.") + `LoginForm` + `SocialLogin` (Github, Gmail) + footer "Ainda não tem conta? **Crie seu cadastro!**" → `/register`. Submit handler `console.info` for now.
 
 ## Routing
-- [main.tsx](../apps/web/src/main.tsx): wrap in `BrowserRouter`.
-- [App.tsx](../apps/web/src/App.tsx): `Routes` — `/` → `Navigate` to `/login`, `/login` → `LoginPage`. No `/register` route yet (link exists, page comes later).
+- [main.tsx](../../apps/web/src/main.tsx): wrap in `BrowserRouter`.
+- [App.tsx](../../apps/web/src/App.tsx): `Routes` — `/` → `Navigate` to `/login`, `/login` → `LoginPage`. No `/register` route yet (link exists, page comes later).
 
 ## Tests (essential usage per component)
 - Atoms: render, variants/props forwarded, click/change events.
