@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
 type AuthLayoutProps = {
-  banner: { src: string; alt: string }
+  banner: { src: string; alt: string; className?: string }
   title: string
   subtitle: string
   children: ReactNode
@@ -21,7 +21,7 @@ export function AuthLayout({
         <img
           src={banner.src}
           alt={banner.alt}
-          className="hidden h-full w-full object-cover md:block"
+          className={`hidden h-full w-full object-cover md:block ${banner.className ?? ''}`.trim()}
         />
         <main className="flex flex-col gap-8 p-8 md:p-12">
           <header className="flex flex-col gap-2">

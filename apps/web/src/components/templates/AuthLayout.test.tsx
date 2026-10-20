@@ -31,4 +31,17 @@ describe('AuthLayout', () => {
     )
     expect(screen.queryByRole('contentinfo')).not.toBeInTheDocument()
   })
+
+  it('applies a custom banner className', () => {
+    render(
+      <AuthLayout
+        banner={{ ...banner, className: 'object-[60%_50%]' }}
+        title="Cadastro"
+        subtitle="Crie sua conta"
+      >
+        <p>Form</p>
+      </AuthLayout>,
+    )
+    expect(screen.getByAltText('Banner de teste')).toHaveClass('object-cover', 'object-[60%_50%]')
+  })
 })
