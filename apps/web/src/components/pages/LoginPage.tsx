@@ -1,3 +1,8 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { getErrorMessage } from '../../services/apiError'
+import { login } from '../../services/auth'
+import { saveToken } from '../../services/tokenStorage'
 import { TextLink } from '../atoms/TextLink'
 import { LoginForm } from '../organisms/LoginForm'
 import type { LoginValues } from '../organisms/LoginForm'
@@ -9,9 +14,29 @@ const providers = [
   { name: 'Gmail', logo: '/gmail.png' },
 ]
 
+const LOGIN_ERRORS = {
+  400: 'Informe um email válido',
+  401: 'Email ou senha inválidos',
+}
+
 export function LoginPage() {
-  function handleSubmit(values: LoginValues) {
-    console.info('login submitted', values)
+  const navigate = useNavigate()
+  const [error, setError] = useState<string>()
+  const [submitting, setSubmitting] = useState(false)
+
+  async function handleSubmit({ identifier, password, remember }: LoginValues) {
+    setError(undefined)
+    setSubmitting(true)
+    try {
+      // The API only accepts emails as the login identifier.
+      const { accessToken } = await login({ email: identifier, password })
+      saveToken(accessToken, remember)
+      navigate('/')
+    } catch (err) {
+      setError(getErrorMessage(err, LOGIN_ERRORS))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   function handleSocialSelect(name: string) {
@@ -30,7 +55,11 @@ export function LoginPage() {
         </>
       }
     >
-      <LoginForm onSubmit={handleSubmit} />
+      <LoginForm
+        onSubmit={handleSubmit}
+        error={error}
+        submitting={submitting}
+      />
       <SocialLogin providers={providers} onSelect={handleSocialSelect} />
     </AuthLayout>
   )
