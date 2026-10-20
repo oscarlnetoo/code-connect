@@ -13,6 +13,9 @@ export type RegisterValues = {
 
 type RegisterFormProps = {
   onSubmit: (values: RegisterValues) => void
+  /** Form-level error, e.g. returned by the API. */
+  error?: string
+  submitting?: boolean
 }
 
 type Errors = Partial<Record<'name' | 'email' | 'password', string>>
@@ -21,7 +24,11 @@ const REQUIRED = 'Campo obrigatório'
 const INVALID_EMAIL = 'Email inválido'
 const EMAIL_PATTERN = /^\S+@\S+\.\S+$/
 
-export function RegisterForm({ onSubmit }: RegisterFormProps) {
+export function RegisterForm({
+  onSubmit,
+  error,
+  submitting = false,
+}: RegisterFormProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -81,7 +88,17 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         checked={remember}
         onChange={(event) => setRemember(event.target.checked)}
       />
-      <Button type="submit" icon={<span aria-hidden="true">→</span>}>
+      {error && (
+        <p role="alert" className="text-sm text-red-400">
+          {error}
+        </p>
+      )}
+      <Button
+        type="submit"
+        disabled={submitting}
+        aria-busy={submitting || undefined}
+        icon={<span aria-hidden="true">→</span>}
+      >
         Cadastrar
       </Button>
     </form>

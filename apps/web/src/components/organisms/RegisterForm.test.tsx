@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { RegisterForm } from './RegisterForm'
 
-function setup() {
+function setup(props: { error?: string; submitting?: boolean } = {}) {
   const onSubmit = vi.fn()
-  render(<RegisterForm onSubmit={onSubmit} />)
+  render(<RegisterForm onSubmit={onSubmit} {...props} />)
   return { onSubmit }
 }
 
@@ -54,5 +54,17 @@ describe('RegisterForm', () => {
       remember: true,
     })
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('shows a form-level error', () => {
+    setup({ error: 'Este email já está cadastrado' })
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      'Este email já está cadastrado',
+    )
+  })
+
+  it('disables the submit button while submitting', () => {
+    setup({ submitting: true })
+    expect(screen.getByRole('button', { name: /Cadastrar/ })).toBeDisabled()
   })
 })

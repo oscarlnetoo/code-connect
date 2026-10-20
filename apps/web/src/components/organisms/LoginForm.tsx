@@ -13,13 +13,20 @@ export type LoginValues = {
 
 type LoginFormProps = {
   onSubmit: (values: LoginValues) => void
+  /** Form-level error, e.g. returned by the API. */
+  error?: string
+  submitting?: boolean
 }
 
 type Errors = Partial<Record<'identifier' | 'password', string>>
 
 const REQUIRED = 'Campo obrigatório'
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({
+  onSubmit,
+  error,
+  submitting = false,
+}: LoginFormProps) {
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
   const [remember, setRemember] = useState(false)
@@ -68,7 +75,17 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           Esqueci a senha
         </TextLink>
       </div>
-      <Button type="submit" icon={<span aria-hidden="true">→</span>}>
+      {error && (
+        <p role="alert" className="text-sm text-red-400">
+          {error}
+        </p>
+      )}
+      <Button
+        type="submit"
+        disabled={submitting}
+        aria-busy={submitting || undefined}
+        icon={<span aria-hidden="true">→</span>}
+      >
         Login
       </Button>
     </form>

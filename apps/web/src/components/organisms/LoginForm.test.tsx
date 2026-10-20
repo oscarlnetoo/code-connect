@@ -4,11 +4,11 @@ import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import { LoginForm } from './LoginForm'
 
-function setup() {
+function setup(props: { error?: string; submitting?: boolean } = {}) {
   const onSubmit = vi.fn()
   render(
     <MemoryRouter>
-      <LoginForm onSubmit={onSubmit} />
+      <LoginForm onSubmit={onSubmit} {...props} />
     </MemoryRouter>,
   )
   return { onSubmit }
@@ -54,5 +54,15 @@ describe('LoginForm', () => {
       remember: true,
     })
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+  })
+
+  it('shows a form-level error', () => {
+    setup({ error: 'Email ou senha inválidos' })
+    expect(screen.getByRole('alert')).toHaveTextContent('Email ou senha inválidos')
+  })
+
+  it('disables the submit button while submitting', () => {
+    setup({ submitting: true })
+    expect(screen.getByRole('button', { name: /Login/ })).toBeDisabled()
   })
 })
